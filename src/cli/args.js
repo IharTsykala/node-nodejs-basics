@@ -1,5 +1,13 @@
+const { argv } = process;
+
 const parseArgs = () => {
-    // Write your code here 
+	const args = argv.slice(2);
+	
+	args.forEach((arg, index) => {
+		if (arg.startsWith('--')) {
+			console.log(`${arg.slice(2)} is ${args[index + 1]}`);
+		}
+	});
 };
 
-parseArgs();
+// parseArgs();
