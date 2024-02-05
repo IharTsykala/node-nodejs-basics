@@ -32,10 +32,24 @@ const transform = async () => {
 
 	const transformStream = new TransformStream();
 
+	// pipeline(
+	// 	readStream,
+	// 	transformStream,
+	// 	writeStream,
+	// 	(err) => {
+	// 		if (err) {
+	// 			console.error('Pipeline failed:', err);
+	// 			return
+	// 		}
+	//
+	// 		console.log('Data was written in file');
+	// 	}
+	// )
+	
 	pipeline(
-		readStream,
+		process.stdin,
 		transformStream,
-		writeStream,
+		process.stdout,
 		(err) => {
 			if (err) {
 				console.error('Pipeline failed:', err);
@@ -45,6 +59,10 @@ const transform = async () => {
 			console.log('Data was written in file');
 		}
 	)
+	
+	process.stdin.on("end", () => {
+		console.log("Finished reading input.");
+	});
 	
 	readStream.on('error', (err) => {
 		console.error('Error by reading fail:', err);

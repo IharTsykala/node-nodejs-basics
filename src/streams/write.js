@@ -14,20 +14,26 @@ const write = async () => {
 	
 	const writeStream = fs.createWriteStream(readPath, { flags: 'a' });
 	
-	process.stdin.pipe(writeStream);
+	process.stdin.setEncoding('utf8');
 	
-	writeStream.write('Hello world!');
-	writeStream.write('it is test');
-
+	console.log('Enter data to write to the file. Press Ctrl + D to finish.');
+	
+	process.stdin.on('data', (data) => {
+		writeStream.write(data);
+	});
+	
+	process.stdin.on('end', () => {
+		console.log('Data input ended.');
+		writeStream.end();
+	});
+	
 	writeStream.on('finish', () => {
-		console.log('Data was written in fail');
-	});
-
-	writeStream.on('error', (err) => {
-		console.error('Error by reading:', err);
+		console.log('Data was written in file');
 	});
 	
-	writeStream.end()
+	writeStream.on('error', (err) => {
+		console.error('Error by writing:', err);
+	});
 };
 
 await write();
